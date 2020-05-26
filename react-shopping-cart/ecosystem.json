@@ -1,0 +1,51 @@
+{
+    /**
+   * Application configuration section
+   * http://pm2.keymetrics.io/docs/usage/application-declaration/
+   */
+  apps: [
+        // First application
+        {
+      name: "Pure Goods Public Server",
+      script: "/var/www/puregoods/current/server/app.js",
+      interpreter: "node@8.11.1",
+            "env_dev": {
+                "NODE_ENV": "dev"
+            },
+            "env_production": {
+                "NODE_ENV": "production"
+            }
+        }
+    ],
+    /**
+   * Deployment section
+   * http://pm2.keymetrics.io/docs/usage/deployment/
+   */
+  deploy: {
+    production: {
+      user: "ec2-user",
+      host: "localhost",
+      ref: "origin/master",
+      repo: "git@bitbucket.org:edrivingllc/mentorlms.git",
+      path: "/var/www/mentor_lms",
+            "post-deploy": "npm install ; pm2 startOrRestart ecosystem.json --env production ; sleep 10s; pm2 save;"
+        },
+  
+    dev: {
+      user: "ec2-user",
+      host: "localhost",
+      ref: "origin/master",
+      repo: "git@bitbucket.org:edrivingllc/mentorlms.git",
+      path: "/var/www/mentor_lms",
+            "post-deploy": "npm install ; pm2 startOrRestart ecosystem.json --env dev ; sleep 5s; pm2 save;"
+        },
+    local: {
+      user: "ec2-user",
+      host: "localhost",
+      ref: "origin/master",
+      repo: "git@bitbucket.org:edrivingllc/mentorlms.git",
+      path: "/var/www/mentor_lms",
+            "post-deploy": "npm install ; pm2 startOrRestart ecosystem.json --env dev;sleep 5s;pm2 save; "
+        }
+    }
+}
