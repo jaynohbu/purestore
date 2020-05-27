@@ -26,8 +26,8 @@
       user: "ec2-user",
       host: "localhost",
       ref: "origin/master",
-      repo: "git@bitbucket.org:edrivingllc/mentorlms.git",
-      path: "/var/www/mentor_lms",
+      repo: "git@github.com:jaynohbu/purestore.git",
+      path: "/var/www/puregoods",
             "post-deploy": "npm install ; pm2 startOrRestart ecosystem.json --env production ; sleep 10s; pm2 save;"
         },
   
@@ -35,16 +35,16 @@
       user: "ec2-user",
       host: "localhost",
       ref: "origin/master",
-      repo: "git@bitbucket.org:edrivingllc/mentorlms.git",
-      path: "/var/www/mentor_lms",
+      repo: "git@github.com:jaynohbu/purestore.git",
+      path: "/var/www/puregoods",
             "post-deploy": "npm install ; pm2 startOrRestart ecosystem.json --env dev ; sleep 5s; pm2 save;"
         },
     local: {
       user: "ec2-user",
       host: "localhost",
       ref: "origin/master",
-      repo: "git@bitbucket.org:edrivingllc/mentorlms.git",
-      path: "/var/www/mentor_lms",
+      repo: "git@github.com:jaynohbu/purestore.git",
+      path: "/var/www/puregoods",
             "post-deploy": "npm install ; pm2 startOrRestart ecosystem.json --env dev;sleep 5s;pm2 save; "
         }
     }

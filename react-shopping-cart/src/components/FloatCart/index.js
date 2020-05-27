@@ -84,10 +84,9 @@ class FloatCart extends Component {
         cartProducts
       } = this.props;
     const {
-      totalPrice,
+      
       productQuantity,
-      currencyFormat,
-      currencyId
+   
     } = this.props.cartTotal;
 
     if (!productQuantity) {
@@ -99,13 +98,8 @@ class FloatCart extends Component {
           isLoading: false
         });
       });
-      checkoutProducts(cartProducts)
-      alert(
-        `Checkout - Subtotal: ${currencyFormat} ${formatPrice(
-          totalPrice,
-          currencyId
-        )}`
-      );
+      checkoutProducts(cartProducts);
+    
     }
   };
 
