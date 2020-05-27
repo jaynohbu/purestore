@@ -1,12 +1,4 @@
 const path = require('path');
-const https = require('https');
-const fs = require('fs');
-
-const options = {
-  key: fs.readFileSync(path.join(__dirname, 'key.pem')),
-  cert: fs.readFileSync(path.join(__dirname, 'cert.pem'))
-};
-
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -52,10 +44,8 @@ app.get('/api/checkout/:key', async (req, res, next) => {
   }
   next();
 });
-
-https.createServer(options, app)
-  .listen(port, function () {
-   console.log(`[products] API listening on port ${port}.`);
-  })
+app.listen(port, () => {
+  console.log(`[products] API listening on port ${port}.`);
+});
 
 
