@@ -7,7 +7,7 @@
         // First application
         {
       name: "Pure Goods Public Server",
-      script: "current/app.js",
+      script: "/var/www/purestore/current/app.js",
       interpreter: "node@8.11.1",
             "env_dev": {
                 "NODE_ENV": "dev"
@@ -36,7 +36,7 @@
       host: "localhost",
       ref: "origin/master",
       repo: "git@github.com:jaynohbu/purestore.git",
-      path: "www/purestore",
+      path: "/var/www/purestore",
             "post-deploy": "npm install ; pm2 startOrRestart ecosystem.json --env dev ; sleep 5s; pm2 save;"
         },
     local: {
@@ -44,7 +44,7 @@
       host: "localhost",
       ref: "origin/master",
       repo: "https://github.com/jaynohbu/purestore.git",
-      path: "www/purestore",
+      path: "/var/www/purestore",
             "post-deploy": "npm install ; pm2 startOrRestart ecosystem.json --env dev;sleep 5s;pm2 save; "
         }
     }
