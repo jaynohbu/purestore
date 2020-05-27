@@ -7,7 +7,7 @@
         // First application
         {
       name: "Pure Goods Public Server",
-      script: "www/purestore/current/react-shopping-cart/server/app.js",
+      script: "/current/app.js",
       interpreter: "node@8.11.1",
             "env_dev": {
                 "NODE_ENV": "dev"
@@ -43,7 +43,7 @@
       user: "ec2-user",
       host: "localhost",
       ref: "origin/master",
-      repo: "git@github.com:jaynohbu/purestore.git",
+      repo: "https://github.com/jaynohbu/purestore.git",
       path: "www/purestore",
             "post-deploy": "npm install ; pm2 startOrRestart ecosystem.json --env dev;sleep 5s;pm2 save; "
         }
