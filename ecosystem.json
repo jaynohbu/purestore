@@ -7,7 +7,7 @@
         // First application
         {
       name: "Pure Goods Public Server",
-      script: "~/www/purestore/current/react-shopping-cart/server/app.js",
+      script: "www/purestore/current/react-shopping-cart/server/app.js",
       interpreter: "node@8.11.1",
             "env_dev": {
                 "NODE_ENV": "dev"
