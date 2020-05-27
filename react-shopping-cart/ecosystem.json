@@ -23,7 +23,7 @@
    */
   deploy: {
     production: {
-      user: "root",
+      user: "ec2-user",
       host: "localhost",
       ref: "origin/master",
       repo: "git@github.com:jaynohbu/purestore.git",
@@ -32,7 +32,7 @@
         },
   
     dev: {
-      user: "root",
+      user: "ec2-user",
       host: "localhost",
       ref: "origin/master",
       repo: "git@github.com:jaynohbu/purestore.git",
@@ -40,7 +40,7 @@
             "post-deploy": "npm install ; pm2 startOrRestart ecosystem.json --env dev ; sleep 5s; pm2 save;"
         },
     local: {
-      user: "root",
+      user: "ec2-user",
       host: "localhost",
       ref: "origin/master",
       repo: "git@github.com:jaynohbu/purestore.git",
