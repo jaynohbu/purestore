@@ -7,7 +7,7 @@
         // First application
         {
       name: "Pure Goods Public Server",
-      script: "/current/app.js",
+      script: "www/purestore/current/app.js",
       interpreter: "node@8.11.1",
             "env_dev": {
                 "NODE_ENV": "dev"
