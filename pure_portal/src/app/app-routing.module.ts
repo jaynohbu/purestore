@@ -10,7 +10,7 @@ import { ProductAdminComponent } from './product-admin/product-admin.component';
 const routes: Routes = [
   {
     path: '',
-    component: LoginComponent,
+    component: DashboardComponent,
     data: { title: 'Portal Login' }
   },
   {
@@ -27,12 +27,14 @@ const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
-    data: { title: 'Portal Login' }
+    data: { title: 'Portal Login' },
+    canActivate: [AuthGuardService]
   },//ProductAdminComponent
   {
     path: 'products',
     component: ProductAdminComponent,
-    data: { title: 'Product Administration' }
+    data: { title: 'Product Administration' },
+    canActivate: [AuthGuardService]
   },//ProductAdminComponent
   {
     path: 'passwordreset/:hascode',
