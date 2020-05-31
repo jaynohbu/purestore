@@ -19,7 +19,9 @@ app.use(function (req, res, next) {
 const port = 8001;
 
 app.get('/api/products', (req, res) => {
+  console.log('/api/products');
   docs.getAllProducts().then((prods)=>{
+    console('prods' + prods.length)
       res.status(200).send({
           products: prods
       });
