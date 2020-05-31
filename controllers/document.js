@@ -122,17 +122,22 @@ module.exports.getAllProducts = () => {
         var db = client.db(config.MONGO_DB);
         try {
           let cursor = db.collection("products").find({});
+          let docs=[];
           cursor.each(async function (err2, doc) {
             if (err2) {
+               console.log('error 2');
+              console.log(err2);
               return reject(err2);
             }
             if (doc) {
-              return resolve(doc);
+               docs.push(doc);
             } else {
-              return resolve(null);
+              return resolve(docs);
             }
           })
         } catch (e) {
+          console.log('error 1');
+          console.log(e)
           reject(e)
         }
 
