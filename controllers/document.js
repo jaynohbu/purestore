@@ -111,6 +111,27 @@ module.exports.insertProduct = (item) => {
     });
   });
 }
+module.exports.insertCategory = (item) => {
+  return new Promise((resolve, reject) => {
+    var url = config.MONGO_URL;
+    MongoClient.connect(url, {
+
+    }, async function (err, client) {
+      if (!err) {
+        var db = client.db(config.MONGO_DB);
+        try {
+          db.collection("categories").insertOne(item);
+          resolve()
+        } catch (e) {
+          reject(e)
+        }
+
+      } else {
+        return reject(err);
+      }
+    });
+  });
+}
 
 module.exports.getAllProducts = () => {
   return new Promise((resolve, reject) => {
@@ -131,6 +152,41 @@ module.exports.getAllProducts = () => {
             }
             if (doc) {
                docs.push(doc);
+            } else {
+              return resolve(docs);
+            }
+          })
+        } catch (e) {
+          console.log('error 1');
+          console.log(e)
+          reject(e)
+        }
+
+      } else {
+        return reject(err);
+      }
+    });
+  });
+}
+module.exports.getAllCategories = () => {
+  return new Promise((resolve, reject) => {
+    var url = config.MONGO_URL;
+    MongoClient.connect(url, {
+
+    }, async function (err, client) {
+      if (!err) {
+        var db = client.db(config.MONGO_DB);
+        try {
+          let cursor = db.collection("categories").find({});
+          let docs = [];
+          cursor.each(async function (err2, doc) {
+            if (err2) {
+              console.log('error 2');
+              console.log(err2);
+              return reject(err2);
+            }
+            if (doc) {
+              docs.push(doc);
             } else {
               return resolve(docs);
             }

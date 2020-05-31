@@ -28,6 +28,16 @@ app.get('/api/products', (req, res) => {
   })
 
 });
+app.get('/api/categories', (req, res) => {
+  console.log('/api/categories');
+  docs.getAllCategories().then((cats) => {
+    console.log('categories' + cats.length)
+    res.status(200).send({
+      categories: cats
+    });
+  })
+
+});
 app.post('/api/checkout', (req, res, next) => {
   try{
   docs.insertCheckout(req.body.key, req.body.items);

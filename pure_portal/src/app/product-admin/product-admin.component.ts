@@ -157,7 +157,7 @@ export class ProductAdminComponent implements OnInit {
 
     this.productService.getAllProducts().subscribe((event) => {
       if (event instanceof HttpResponse) {
-        this.products = event.body.data;
+        this.products = event.body.products;
         // for (let content of this.contents) {
         //   if (this.productService.getCountryCodeByValue(content.country))
         //     content.country = this.productService.getCountryCodeByValue(content.country).text;
