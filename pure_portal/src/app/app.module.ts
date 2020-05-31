@@ -18,6 +18,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProductAdminComponent } from './product-admin/product-admin.component';
 import { DeleteConfirmComponent } from './dialogs/delete-confirm/delete-confirm.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
+import { UploadComponent } from './controls/upload/upload.component';
+import { DialogComponent } from './controls/upload/dialog/dialog.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,11 @@ import { ProductDetailComponent } from './product-detail/product-detail.componen
   
     DeleteConfirmComponent,
   
-    ProductDetailComponent
+    ProductDetailComponent,
+  
+    UploadComponent,
+  
+    DialogComponent
    
   ],
   imports: [

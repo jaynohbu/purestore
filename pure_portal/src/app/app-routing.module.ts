@@ -10,7 +10,7 @@ import { ProductAdminComponent } from './product-admin/product-admin.component';
 const routes: Routes = [
   {
     path: '',
-    component: DashboardComponent,
+    component: LoginComponent,
     data: { title: 'Portal Login' }
   },
   {

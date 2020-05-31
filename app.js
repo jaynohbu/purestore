@@ -19,7 +19,11 @@ app.use(function (req, res, next) {
 const port = 8001;
 
 app.get('/api/products', (req, res) => {
-  res.sendFile(path.join(__dirname, 'data', 'products.json'));
+  docs.getAllProducts().then((prods)=>{
+      res.status(200).send({
+          products: prods
+      });
+  })
 
 });
 app.post('/api/checkout', (req, res, next) => {

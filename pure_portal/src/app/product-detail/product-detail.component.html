@@ -1,5 +1,5 @@
 <form class='form-wrap'>
-  <!-- <uploader key="{{product.sku}}" (close)="uploadComplete($event)"></uploader> -->
+  <uploader key="{{product.sku}}" (close)="uploadComplete($event)"></uploader>
   <form class="content-container" [formGroup]="productForm" *ngIf='contentKeyExist()'>
     <p *ngIf="hasError" class="error_box">
       {{errorMessage}}

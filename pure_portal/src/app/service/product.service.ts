@@ -28,7 +28,7 @@ export class ProductService {
  
 
   public getAllProducts(): Observable<HttpEvent<any>> {
-    let url = environment.API_ENDPOINT + '/Products'
+    let url = environment.API_ENDPOINT + '/products'
     let options = { headers: this.headers };
     const req = new HttpRequest('GET', url, {}, options);
     return this.http.request(req);
