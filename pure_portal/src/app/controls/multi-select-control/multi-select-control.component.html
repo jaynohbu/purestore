@@ -1,0 +1,23 @@
+<form class="multi-select-form" style="position: relative;" autocomplete="off">
+  <div class="full-width">
+ <div >
+    <mat-select [formControl]="multiSelectControl" (click)="multiClick();fillAll()" disableOptionCentering panelClass="multiple-panel" multiple>
+      <mat-select-trigger #selTrigger  >
+        <span>{{this.allSelected.selected?allText:getSelectedString()}}</span>
+      </mat-select-trigger>
+      <div class="multi-select-input-wrap">
+      <input type="text" #txtInput [placeholder]="" aria-label="Number" class="form-control form-control-lg multi-select-input"   autocomplete="off"
+        [formControl]="multiSelectInputControl" >
+        </div>
+      <mat-option #allSelected (click)="toggleAllSelection()">
+        {{allText}}
+      </mat-option>
+      <mat-option [hidden]="allSelected.selected" (click)="optionClick(option, $event)" id="opt_{{option}}"
+        *ngFor="let option of filteredOptions | async" [value]="option">
+        {{option}}
+      </mat-option>
+    </mat-select>
+    </div>
+  </div>
+  <form>
+

@@ -1,0 +1,52 @@
+.multi-select-form {
+  min-width: 150px !important;
+  max-width: 200px;
+  width: 100%;
+}
+
+
+/* this will hide the element while it's being animated because
+   the animation happens for the original position */
+
+
+.multi-select-input{
+  border-radius:5px;
+  width: 100%;
+  margin: 0px;
+
+    background-image: url(../../../assets/files/search.png);
+    background-size: 22px 22px;
+    background-repeat: no-repeat;
+     background-position: 16px 8px;;
+     opacity: 0.8;
+    text-indent: 45px;
+
+    font-size:16px;
+    padding:3px;
+}
+
+
+
+
+.multi-select-input-wrap{
+  padding: 10px;
+  background-color:rgb(218, 219, 221);
+}
+
+.full-width {
+  width: 100%;
+}
+.chip-list {
+  width: 100%;
+}
+table{
+    
+    margin-right: 0px;;
+}
+
+// .list-selection{
+//     position: absolute; z-index: 99; top:40px; width: 500px;
+// }
+.icon-dropdown{
+    cursor: pointer;
+}

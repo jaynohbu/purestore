@@ -1,0 +1,41 @@
+
+
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <!-- Tabs Titles -->
+
+    <!-- Icon -->
+    <div class="fadeIn first login">
+
+    </div>
+
+    <!-- Login Form -->
+    <form [formGroup]="loginForm">
+      <div *ngIf="hasError" class="error_box">
+        <div class="panel">
+          <div class="panel panel-header ct-close">
+            <span class="ct-close-x">X</span>
+          </div>
+          <div class="panel panel-body">{{error}}</div>
+        </div>
+      </div>
+      <input type="text" class="fadeIn second tbox" name="login" placeholder="EMAIL" formControlName="username"
+        required>
+      <input type="password" id="password" class="fadeIn third tbox" formControlName="password" autocomplete="new-password"
+        required placeholder="PASSWORD">
+      <input type="submit" (click)="login()" class="fadeIn fourth" value="Log In">
+      <div class="forgot">
+      
+      </div>
+    </form>
+
+    <!-- Remind Passowrd -->
+    <div id="formFooter">
+      <a class="underlineHover"  (click)="forgot()">RESET MY PASSWORD</a>
+
+    </div>
+
+  </div>
+</div>

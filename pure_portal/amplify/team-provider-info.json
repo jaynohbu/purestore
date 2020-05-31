@@ -1,0 +1,20 @@
+{
+    "prod": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-pureportal-prod-151131-authRole",
+            "UnauthRoleArn": "arn:aws:iam::885679036804:role/amplify-pureportal-prod-151131-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::885679036804:role/amplify-pureportal-prod-151131-authRole",
+            "Region": "us-west-2",
+            "DeploymentBucketName": "amplify-pureportal-prod-151131-deployment",
+            "UnauthRoleName": "amplify-pureportal-prod-151131-unauthRole",
+            "StackName": "amplify-pureportal-prod-151131",
+            "StackId": "arn:aws:cloudformation:us-west-2:885679036804:stack/amplify-pureportal-prod-151131/85cf6c60-a2c2-11ea-a991-0a34aba28710",
+            "AmplifyAppId": "ds9z4mrl7wf9a"
+        },
+        "categories": {
+            "auth": {
+                "pureportal133caeee": {}
+            }
+        }
+    }
+}

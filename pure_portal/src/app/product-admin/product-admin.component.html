@@ -1,0 +1,79 @@
+
+<mat-card class="pwrapper">
+  <div>
+    <button mat-raised-button color="" (click)="logOut()">
+      <mat-icon svgIcon="logout"></mat-icon> Logout
+    </button>
+    <div style="float: right; margin-right:5px">
+      <button *ngIf='!editMode' mat-raised-button color="primary" (click)="addNew()">
+        <mat-icon svgIcon="add"></mat-icon> Add New Product
+      </button>
+      <button *ngIf='editMode' mat-raised-button color="primary" (click)="editMode=false;">
+        <mat-icon svgIcon="cancel"></mat-icon> Cancel
+      </button>
+
+    </div>
+    <div style='clear:right'></div>
+    <div *ngIf='!editMode' class='dataGrid' style="overflow-x: scroll">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+      </mat-form-field>
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSourceProduct" matSort>
+          <ng-container matColumnDef="category_name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
+            <td mat-cell *matCellDef="let row"> {{row.category_name}} </td>
+          </ng-container>
+          <ng-container matColumnDef="sku">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>SKU </th>
+            <td mat-cell *matCellDef="let row"> {{row.sku}} </td>
+          </ng-container>
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
+            <td mat-cell *matCellDef="let row"> {{row.title}} </td>
+          </ng-container>
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
+            <td mat-cell *matCellDef="let row"> {{row.description}} </td>
+          </ng-container>
+        
+          <ng-container matColumnDef="updated_at">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+            <td mat-cell *matCellDef="let row"> {{row.updated_at}} </td>
+          </ng-container>
+          <ng-container matColumnDef="content_id">
+            <th mat-header-cell *matHeaderCellDef> </th>
+            <td mat-cell *matCellDef="let row">
+              <table>
+                <tr>
+                
+                  <td *ngIf="showEdit"> <button mat-raised-button (click)="edit(row.content_id)" color="accent">
+                      <mat-icon svgIcon="edit"></mat-icon> Edit
+                    </button></td>
+                  <td *ngIf="showEdit"> <button mat-raised-button (click)="openConfirmDelete(row.content_id)"
+                      color="accent">
+                      <mat-icon svgIcon="delete"></mat-icon> Delete
+                    </button></td>
+                 
+                </tr>
+              </table>
+
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+          </tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[50, 100, 250, 1000]"></mat-paginator>
+      </div>
+    </div>
+  </div>
+  <mat-card *ngIf='editMode'>
+    <product-detail detail="currentDetail" [productNames]='productNames' [categories]='categoryNames'
+      (init)="onContentInit($event)" [product]='currentProduct'><button mat-raised-button color="primary" type="submit"
+        (click)="saveProduct();">
+        <mat-icon svgIcon="save"></mat-icon>Save
+      </button></product-detail>
+  </mat-card>
+
+</mat-card>

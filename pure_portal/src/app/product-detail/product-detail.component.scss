@@ -1,0 +1,36 @@
+.content-container {
+  display: flex;
+  flex-direction: column;
+  padding: 2%;
+
+}
+
+.content-container>* {
+  width: 100%;
+}
+
+.content-container form {
+  margin-bottom: 20px;
+}
+
+.content-container form>* {
+  margin: 5px 0;
+}
+
+.content-container .mat-radio-button {
+  margin: 0 12px;
+}
+
+.txt-duration {
+  width: 50px;
+}
+
+.readOnly {
+  background-color: #D5DBDB
+}
+
+.error_box {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  color: red;
+}

@@ -1,0 +1,71 @@
+<div class="top-nav-wrap">
+
+<table class="tb-logo" >
+  <tr>
+    <td class="logo-left">
+      <table>
+        <tr>
+          <td style="padding-top:6px;padding-left:20px">
+            <svg style="display: inline-block;" xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink" width="59" height="32" viewBox="0 0 39 37">
+              <image id="mentor_KO_bluewheel" height="30"
+                xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAZCAYAAAAv3j5gAAACrklEQVRIia2WW4jPQRTHP7vG5tJa+0BkcwtJbBopoUjy4EFkyZPLg1xarTLavLgU5TJEkYSS0pZC7ZtcQiTJUItcyoMsQt5s0oSOzn+bfvu//Vqnfv3nf+ac+c45M+d8p4YKYnyoBWYB84FJwFD16AZeAreis58rrVMSyPgwDGgFtgBNZdb4A9wAjkRnb+YCMj4sB04DoyrtNCOdwMbo7JeKQMaHvcCeIou8AB4DsshgYLymszFj9wFYGp3tKglkfNgH7E5Uv4GzwLHo7JsimzLAMkD8pidT32QT0dnXfYA0XdcS40/Aiujso+JZ6gO4H2hP1HJRZkdne3qBjA8NwKvkTARkTnT2fSWQDOAOwCeqg9HZXTKoVUVrAiK3aGVeEJHo7FGgI1FtNz6M/AekdbI5mTwfnX2YFyRdHOjR8SBgPRqRzdTJqX6AoFf7cqKSs6fG+NAGHO/P4pWwgSES0YScTheBkMNHbmSTAA3P4XQ4OrsOmKe1Uq3UC9DPxPg60Cy3LlNTBanXX+kMAzNzv7S45UymaabkGwd0SVgfE+NGbR3yXTU+LAAuAWN0fpvxYQYwEWhI/O4BG6Kz70pFKBE9S/7PND709q7o7F2N8EpisxAYq2PJhhTkonIg6EHd0bDr9FsLnEjAvgMtxoe5wCqNRurkqUQbne0uB1CQQguSal6juq/AVAX4b1JoQYe09YiMAM4YHyqybx6p1fTIOZ1M/FqAc8aHumrXMj40Gx/eKp8VT50aSl+6r++DgjwB2qKzD8oAyGa2AgekA6ha6i2ljD7EJ2m7nSExdAOdCiwUMkAfKku0bkZn7HdGZ1O6KErlUh8XCs0wp/wANkVnpfaKp64I4GplzclVYAnlS8duL8VjZW+WctVioXRA6miKcoyIvOWeA/LE6ihLlMBf417G34j0sLUAAAAASUVORK5CYII=" />
+
+            </svg>
+
+          </td>
+          <td class="red-divider"></td>
+        </tr>
+      </table>
+
+    </td>
+    <td class="logo-text">
+      <div>
+        Audit
+      </div>
+    </td>
+    <td colspan="6" class="logo-right-1" class="text-nav" >
+      <div class="text-nav-wrap" id="nav-3"  >
+        <a  href="javascript:void(0)" (click)="toggleDropMenu()">Reports</a>
+        <div class="nav-indic" style="width: 116px;"></div>
+          <div class="drop-menu"[hidden]="hideDropMenu" (mouseleave)="toggleDropMenu()">
+            <span  class="drop-menu-item" (click)="subNavTo($event,'nav-3')" routerLink="/auditvehicle" routerLinkActive="active">Audits</span>
+            <span  class="drop-menu-item" (click)="subNavTo($event,'nav-3')" routerLink="/groundvehicles" routerLinkActive="active">Groundings</span>
+            <span class="drop-menu-item" (click)="subNavTo($event,'nav-3')" routerLink="/singlevehicle" routerLinkActive="active">VIN Lookup</span>
+          </div>
+      </div>
+      <!-- <div class="text-nav-wrap" id="nav-2" >
+        <a routerLink="/trends" (click)="mainNavTo('nav-2')" routerLinkActive="active">Trends</a>
+        <div class="nav-indic" style="width: 102px;"></div>
+      </div>
+      -->
+      <div class="text-nav-wrap" id="nav-1">
+        <a routerLink="/dashboard" (click)="mainNavTo('nav-1')" routerLinkActive="active">Dashboard</a>
+        <div class="nav-indic" style="width: 161px;">
+        </div>
+      </div>
+    </td>
+    <td colspan="1" class="logo-right-end" style="width: 300px;">
+      
+<ng-content select='[button-1]'></ng-content>
+<mat-icon (click)="toSuppport()" class="action-button" style="padding-top:1px; margin-right: 55px;">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32"
+  viewBox="0 -3 30 30">
+  <image id="Vector_Smart_Object" data-name="Vector Smart Object" width="25" height="25" matTooltip="Support"   [matTooltipPosition]="'below'" 
+    xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAABzUlEQVRIiZ2VvUpDQRCFv8SAP5XW1oIawWewkoDaW2qRRm3tFFErC8EoltqZUohYWPkICv5CHkJtTCBoZORsWNfNzeqBZe/OPffM7OzM3hz7d2RgAlgEZoApYFjUV+AeuAaqwFM3iW4OxoE9YD7Lu4cLYB14Dl/kI+QycCvxD6AGLAFFYESjKFtNnHl9U+61g21gQ89XwBpQ7xH9GHAIzGq9A2zGdlD2xI1QShBHnJInuuHvxDmwnFc8cYuinSDu0A4ir0iz48AOtF9p2f2DcIhdafRL8/sMrBQfdVgTiWnJwpjKtg+YzKvODZcSHwJOgIbGiWwhuvHq0jIs5tVEhnPNRyrBAY0l2UJk8ZzWjKXoRR1aVKoa+mBBJKv1JjAYOMjiTQIP1vHmwFXLiK4At85pfHprH1k8C9gC/9EHb5E0pJZqyOtoFYDM2+6f6Dg0B9Ndosgl7iCTV4i8bOrw5gJbiCRe7Dataq5p+LY/8wqRD1c1uwaserZU3qjmVmwH78Cy6nlQz0S6lgjv3bMbbmI7iMF1rYN7Xg64o7JtaX3Q65/sEOvaXjgGVlJ34CPsaB8tS4tFDpyZIdWBHaD7BzucRlL0C6kOUivrJ4AvTQ6AMSjAuGUAAAAASUVORK5CYII=" />
+</svg>
+
+</mat-icon>
+      <mat-icon (click)="logOut()" class="action-button"  style="padding-top:1px">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32"
+          viewBox="0 -3 30 30">
+          <image id="Vector_Smart_Object" data-name="Vector Smart Object" width="25" height="25" matTooltip="Logout" [matTooltipPosition]="'below'" 
+            xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAA3klEQVQ4jbWVPwrCMBSHv0gG8Qx1quCiPYODq+6O7p7FyTu46+ogeAM7iKBbL+DmICiRN4TSJrWJP3g00Lyv788PqljnPWADLIAu9cqBzPH+Ky2wpe9iU2mpzGgOnBx5jyZMbbW5j1FhJyBXSUQBKlnSBUhiAJFxDYGjDW0LfANT4A6kNjSkwgKYlKHakXAGxj98wEBvIRVWygXMLGvURV9aRp6DkAoTmVsqMDPPIsSHhzKMwC2/gKsNQ8zZRsaHo6q8v2z5KedZLOBWzjtppS6M0b0yM1zJLd8vwC/gA+hWKfmthiHcAAAAAElFTkSuQmCC" />
+        </svg>
+      </mat-icon>
+
+    </td>
+  </tr>
+
+</table>
+</div>

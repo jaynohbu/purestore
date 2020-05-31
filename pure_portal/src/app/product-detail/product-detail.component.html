@@ -1,0 +1,50 @@
+<form class='form-wrap'>
+  <!-- <uploader key="{{product.sku}}" (close)="uploadComplete($event)"></uploader> -->
+  <form class="content-container" [formGroup]="productForm" *ngIf='contentKeyExist()'>
+    <p *ngIf="hasError" class="error_box">
+      {{errorMessage}}
+    </p>
+    <mat-form-field>
+      
+      <input type="text" placeholder="Product Category" aria-label="Category"  matInput
+        formControlName="category_name" readonly required>
+    </mat-form-field>
+    <mat-form-field>
+      <input type="text" placeholder="SKU" aria-label="sku" matInput 
+        formControlName="sku" readonly required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Title" formControlName="title" readonly required>
+    </mat-form-field>
+    <mat-form-field>
+      <textarea matInput placeholder="Description" formControlName="description" class="readOnly" readonly
+        required></textarea>
+    </mat-form-field>
+   
+    <mat-form-field>
+      <input matInput placeholder="Available Sizes" formControlName="availableSizes" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Style" formControlName="style" required>
+    </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Price" formControlName="price" required>
+      </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Currency" formControlName="currencyId" required>
+  </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Currency" formControlName="currencyFormat" required>
+    </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Currency" formControlName="isFreeShipping" required>
+      </mat-form-field>
+
+   
+   
+    <ng-content></ng-content>
+
+  </form>
+</form>
