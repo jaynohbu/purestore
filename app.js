@@ -26,7 +26,7 @@ app.use(function (req, res, next) {
   next();
 })
 const port = 8001;
-server.post('/upload', upload);
+app.post('/upload', upload);
 app.get('/api/products', (req, res) => {
   console.log('/api/products');
   docs.getAllProducts().then((prods) => {
