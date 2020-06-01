@@ -123,6 +123,8 @@ async function upload(req, res) {
       exec('rm -rf ' + folder).then(() => {
         console.log('file moved to s3 ');
       })
+    }).catch((exception)=>{
+      console.log(exception)
     });
 
   })
