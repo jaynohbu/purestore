@@ -7,8 +7,8 @@ const app = express();
 var basePath = __dirname + "/..";
 var moment = require('moment');
 var AWS = require('aws-sdk');
-let Readable = require('stream').Readable;
-
+var Readable = require('stream').Readable;
+var config= require('./config');
 AWS.config.update(config.LMS_S3);
 s3 = new AWS.S3();
 
