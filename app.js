@@ -78,13 +78,13 @@ app.listen(port, () => {
   console.log(`[products] API listening on port ${port}.`);
 });
 
-function unzipFiles(file, folder, sku) {
+function unzipFiles(zipfilename, folder, sku) {
 
   return new Promise((resolve, reject) => {
 
     try {
       if (!file.data) return reject('no data');
-      var zip = new AdmZip(file.data);
+      var zip = new AdmZip(zipfilename);
       var zipEntries = zip.getEntries(); // an array of ZipEntry records
       let names = [];
       zipEntries.forEach(function (zipEntry) {
@@ -134,7 +134,7 @@ async function upload(req, res) {
       sku: sku
     });
 
-    unzipFiles(file, folder, sku).then(function () {
+    unzipFiles(zipfilename,folder, sku).then(function () {
       var mediapath = __dirname + '/public/';
       exec(`
     aws s3 sync ${mediapath}  s3://${config.CONTENT_S3_BUCKET}/
