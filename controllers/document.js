@@ -141,7 +141,7 @@ module.exports.getNextSku = () => {
               return reject(err2);
             }
             if (doc) {
-              nextSku = doc.sku + 1;
+              nextSku = parseInt(doc.sku) + 1;
               db.collection("products").insertOne({
                 sku: nextSku
               });

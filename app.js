@@ -78,64 +78,7 @@ app.listen(port, () => {
   console.log(`[products] API listening on port ${port}.`);
 });
 
-function unzipFiles(file, folder) {
-  const stream = new Readable();
-  return new Promise((resolve, reject) => {
-    stream.push(file.data);
-    stream.push(null);
-    try {
-      stream.pipe(unzip.Extract({
-        path: folder
-      }));
-      setTimeout(() => {
-        resolve();
-      }, config.UNZIP_MAX_TIME);
-    } catch (ex) {
-      reject(ex);
-    }
-  })
-}
 
-// function unzipFiles(zipfilename, folder, sku) {
-
-//   return new Promise((resolve, reject) => {
-
-//     try {
-
-//       var zip = new AdmZip(zipfilename);
-//       var zipEntries = zip.getEntries(); // an array of ZipEntry records
-//       let names = [];
-//       zipEntries.forEach(function (zipEntry) {
-//         names.push(zipEntry.entryName);
-//         console.log(zipEntry.getData())
-//       });
-//       zip.extractAllTo(folder, /*overwrite*/ true);
-//       let index = 1;
-//       names.forEach(name => {
-//         let new_name = '';
-//         if (name.indexOf('thumbnail') > 0) {
-//           new_name = sku + "_2" + name;
-//         } else {
-//           new_name = sku + "_" + index + name;
-//         }
-//         if (index == 1) index = index + 2;
-//         else index++;
-
-//         fs.rename(folder + "/" + name, folder + "/" + new_name, function (err) {
-//           if (err) console.log('ERROR: ' + err);
-//         });
-//       })
-
-//       setTimeout(() => {
-//         resolve();
-//       }, config.UNZIP_MAX_TIME);
-//     } catch (ex) {
-//       console.log('zip error')
-//       console.log(ex);
-//       reject(ex);
-//     }
-//   })
-// }
 
 async function upload(req, res) {
   let sku = await docs.getNextSku();
