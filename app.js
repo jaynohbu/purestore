@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const docs = require('./controllers/document');
+const fileUpload = require('express-fileupload');
 const app = express();
 var basePath = __dirname + "/..";
 var moment = require('moment');
@@ -16,6 +17,7 @@ s3 = new AWS.S3();
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+app.use(fileUpload());
 app.use(bodyParser.json());
 app.use(bodyParser.raw());
 app.use(cors());
@@ -98,8 +100,8 @@ function unzipFiles(file, folder, sku) {
 
 async function upload(req, res) {
   let sku = await docs.getNextSku();
-  console.log(req.file)
-  let file = req.file;
+  console.log(req.files)
+  let file = req.files.file;
   if (req.query.sku) sku = req.query.sku;
   let folder = basePath + '/public/' + sku;
   res.status(200).json({
