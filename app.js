@@ -82,7 +82,7 @@ function unzipFiles(file, folder, sku) {
   return new Promise((resolve, reject) => {
   
     try {
-      // reading archives
+     if(!file.data)return reject('no data');
       var zip = new AdmZip(file.data);
       var zipEntries = zip.getEntries(); // an array of ZipEntry records
       let index=1;
