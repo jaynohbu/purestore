@@ -90,7 +90,7 @@ module.exports.getProduct = (sku) => {
   });
 }
 
-module.exports.insertProduct = (item) => {
+module.exports.updateProduct = (product) => {
   return new Promise((resolve, reject) => {
     var url = config.MONGO_URL;
     MongoClient.connect(url, {
@@ -99,9 +99,59 @@ module.exports.insertProduct = (item) => {
       if (!err) {
         var db = client.db(config.MONGO_DB);
         try {
-          db.collection("products").insertOne(item);
-          resolve()
+          db.collection('products').update(
+            {
+              "sku": product.sku
+            },
+           product,
+            {
+              "multi": false, // update only one document 
+              "upsert": false // insert a new document, if no existing document match the query 
+            }
+          );
+          
         } catch (e) {
+          console.log(e)
+          reject(e);
+        }
+        return resolve();
+
+      } else {
+        return reject(err);
+      }
+    });
+  });
+}
+
+module.exports.getNextSku = () => {
+  return new Promise((resolve, reject) => {
+    var url = config.MONGO_URL;
+    MongoClient.connect(url, {}, async function (err, client) {
+      if (!err) {
+        try {
+          var db = client.db(config.MONGO_DB);
+          let cursor = db.collection("products").find().sort({
+            sku: -1
+          }).limit(1);
+          let nextSku = 0;
+          cursor.each(async function (err2, doc) {
+            if (err2) {
+              console.log('error 2');
+              console.log(err2);
+              return reject(err2);
+            }
+            if (doc) {
+              nextSku = doc.sku + 1;
+              db.collection("products").insertOne({
+                sku: nextSku
+              });
+              resolve(nextSku);
+            }
+            return resolve(-1);
+          })
+        } catch (e) {
+          console.log('error 1');
+          console.log(e)
           reject(e)
         }
 
@@ -143,15 +193,15 @@ module.exports.getAllProducts = () => {
         var db = client.db(config.MONGO_DB);
         try {
           let cursor = db.collection("products").find({});
-          let docs=[];
+          let docs = [];
           cursor.each(async function (err2, doc) {
             if (err2) {
-               console.log('error 2');
+              console.log('error 2');
               console.log(err2);
               return reject(err2);
             }
             if (doc) {
-               docs.push(doc);
+              docs.push(doc);
             } else {
               return resolve(docs);
             }

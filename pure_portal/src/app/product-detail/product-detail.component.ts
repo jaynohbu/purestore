@@ -48,17 +48,15 @@ export class ProductDetailComponent implements OnInit {
   public resetContent() {
 
     if (!this.product) {
-      console.log(this.product)
+      this.product = new ProductData();
     }
     this.productForm = this.fb.group(this.product as any);
     //console.log(this.content.content_key);
   }
 
   contentKeyExist() {
-    if (this.productForm.controls.sku.value) {
-      if (this.productForm.controls.sku.value.length > 0) {
-        return true;
-      }
+    if (this.product.sku) {
+      return true;
     }
     return false;
   }
@@ -70,6 +68,7 @@ export class ProductDetailComponent implements OnInit {
       })
     })
     this.resetContent();
+    if (!this.contentKeyExist())return;
     this.filteredCategories = this.productForm.controls.category_name.valueChanges
       .pipe(
         startWith(''),

@@ -20,6 +20,7 @@ import { DeleteConfirmComponent } from './dialogs/delete-confirm/delete-confirm.
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { UploadComponent } from './controls/upload/upload.component';
 import { DialogComponent } from './controls/upload/dialog/dialog.component';
+import { UploadService } from './controls/upload/upload.service';
 
 @NgModule({
   declarations: [
@@ -48,14 +49,15 @@ import { DialogComponent } from './controls/upload/dialog/dialog.component';
     AppRoutingModule,
     AmplifyAngularModule,
     FormsModule,
+  
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
     NgMaterialsModule,
     MatNativeDateModule
   ],
-  entryComponents: [],
-  providers: [AmplifyService, DatePipe],
+  entryComponents: [DeleteConfirmComponent, DialogComponent],
+  providers: [AmplifyService, DatePipe, UploadService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

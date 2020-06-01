@@ -153,28 +153,7 @@ export class ProductAdminComponent implements OnInit {
     // }
 
   }
-  reloadContets() {
-
-    this.productService.getAllProducts().subscribe((event) => {
-      if (event instanceof HttpResponse) {
-        this.products = event.body.products;
-        // for (let content of this.contents) {
-        //   if (this.productService.getCountryCodeByValue(content.country))
-        //     content.country = this.productService.getCountryCodeByValue(content.country).text;
-        //   if (this.productService.getLanguageCodeByValue(content.language))
-        //     content.language = this.productService.getLanguageCodeByValue(content.language).text;
-        // }
-        this.dataSourceProduct = new MatTableDataSource(this.products);
-        this.dataSourceProduct.paginator = this.paginator;
-        this.dataSourceProduct.sort = this.sort;
-        this.paginator.pageIndex = 0;
-      } else if (event instanceof HttpErrorResponse) {
-        console.log(event);
-      }
-    });
-
-
-  }
+ 
   refreshToken() {
     Auth.currentSession()
       .then(data => {
@@ -184,31 +163,39 @@ export class ProductAdminComponent implements OnInit {
     setTimeout(() => this.refreshToken(), 20000);
   }
   async reloadAllData() {
-
-
-    this.productService.getAllProducts().subscribe((event) => {
-      if (event instanceof HttpResponse) {
-        this.products = event.body.data;
-        this.productNames = [];
-        for (let course of this.products) {
-          this.productNames.push(course.name);
-        }
-      } else if (event instanceof HttpErrorResponse) {
-        console.log(event);
-      }
-    });
     this.productService.getAllProductCategores().subscribe((event) => {
       if (event instanceof HttpResponse) {
-        this.categories = event.body.data;
+        this.categories = event.body.categories;
         this.categoryNames = [];
         for (let cat of this.categories) {
           this.categoryNames.push(cat.name);
         }
+
+        this.productService.getAllProducts().subscribe((event2) => {
+          if (event2 instanceof HttpResponse) {
+            this.products = event2.body.products;
+            if (this.products.length>0)
+            this.products = this.products.map(p=>{
+              p.category_name = this.categories.find(c=>p.category_id==c.id).name;
+              return p;
+            });
+            this.dataSourceProduct = new MatTableDataSource(this.products);
+            this.dataSourceProduct.paginator = this.paginator;
+            this.dataSourceProduct.sort = this.sort;
+            this.paginator.pageIndex = 0;
+          } else if (event2 instanceof HttpErrorResponse) {
+            console.log(event2);
+          }
+        });
       } else if (event instanceof HttpErrorResponse) {
         console.log(event);
       }
     });
-    this.reloadContets();
+
+  
+
+ 
+ 
 
 
   }

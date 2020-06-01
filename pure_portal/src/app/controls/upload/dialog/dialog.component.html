@@ -1,0 +1,14 @@
+<input type="file" #file style="display: none" (change)="onFileAdded()" multiple />
+<div class="container" style='position:relative'>
+  <mat-dialog-content>
+    <mat-progress-bar *ngIf="uploadingStatus" mode="determinate" [value]="uploadIndicator | async">
+    </mat-progress-bar>
+  </mat-dialog-content>
+  <button style='position: absolute; left:12px; top:13px;' [disabled]="uploading || uploadSuccessful" mat-raised-button
+    color="primary" class="add-files-btn" (click)="addFile()">
+    Add a File
+  </button>
+  <button style='position: absolute; right:2px; top:2px;' mat-button mat-dialog-close>
+    <mat-icon svgIcon="cancel"></mat-icon>
+  </button>
+</div>
