@@ -9,6 +9,7 @@ var basePath = __dirname + "/..";
 var moment = require('moment');
 var AWS = require('aws-sdk');
 var AdmZip = require('adm-zip');
+var fs = require('fs');
 const {
   exec
 } = require("child_process");
@@ -85,38 +86,32 @@ function unzipFiles(file, folder, sku) {
       if (!file.data) return reject('no data');
       var zip = new AdmZip(file.data);
       var zipEntries = zip.getEntries(); // an array of ZipEntry records
-      let index = 1;
+      let names=[];
       zipEntries.forEach(function (zipEntry) {
-        let name='';
-        if (zipEntry.entryName.indexOf('thumbnail') > 0) {
-          name = sku + "_" + 2 + "." + zipEntry.name;
-       
-        } else {
-          if (index == 2) index = 3;
-           name = sku + "_" + index + "." + zipEntry.name;
-          index++;
-        }
-
-    const params = {
-      Bucket: config.CONTENT_S3_BUCKET,
-      Key:name, // File name you want to save as in S3
-      Body: zipEntry.getData()
-    };
-
-    // Uploading files to the bucket
-    s3.upload(params, function (err, data) {
-      if (err) {
-        throw err;
-      }
-      console.log(`File uploaded successfully. ${data.Location}`);
-    });
-   
+       names.push(zipEntry.entryName);
       });
       zip.extractAllTo(folder, /*overwrite*/ true);
+      let index=1;
+      names.forEach(name=>{
+        let new_name='';
+        if(name.indexOf('thumbnail')>0){
+           new_name = sku + "_2"  + name;
+        }else{
+          new_name = sku + "_" + index + name;
+        }
+        if (index == 1) index=index+2;
+        else index++;
+
+        fs.rename(folder + "/" + name, folder + "/" + new_name, function (err) {
+          if (err) console.log('ERROR: ' + err);
+        });
+      })
+
       setTimeout(() => {
         resolve();
       }, config.UNZIP_MAX_TIME);
     } catch (ex) {
+      console.log(ex);
       reject(ex);
     }
   })
@@ -134,24 +129,24 @@ async function upload(req, res) {
 
   unzipFiles(file, folder, sku).then(function () {
     var mediapath = basePath + '/public/';
-    // exec(`
-    // aws s3 sync ${mediapath}  s3://${config.CONTENT_S3_BUCKET}/
-    // `, (error, stdout, stderr) => {
-    //   if (error) {
-    //     console.log(error.stack);
-    //     console.log('Error code: ' + error.code);
-    //     console.log('Signal received: ' + error.signal);
-    //   }
+    exec(`
+    aws s3 sync ${mediapath}  s3://${config.CONTENT_S3_BUCKET}/
+    `, (error, stdout, stderr) => {
+      if (error) {
+        console.log(error.stack);
+        console.log('Error code: ' + error.code);
+        console.log('Signal received: ' + error.signal);
+      }
 
-    //   exec('rm -rf ' + folder, function (error2, stdout2, stderr2) {
-    //     if (error2) {
-    //       console.log(error2.stack);
-    //       console.log('Error code: ' + error2.code);
-    //       console.log('Signal received: ' + error2.signal);
-    //     }
-    //     console.log('file moved to s3 ');
-    //   })
-    // })
+      exec('rm -rf ' + folder, function (error2, stdout2, stderr2) {
+        if (error2) {
+          console.log(error2.stack);
+          console.log('Error code: ' + error2.code);
+          console.log('Signal received: ' + error2.signal);
+        }
+        console.log('file moved to s3 ');
+      })
+    })
   }).catch((exception) => {
     console.log(exception)
   });
