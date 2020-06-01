@@ -89,6 +89,7 @@ function unzipFiles(file, folder, sku) {
       let names=[];
       zipEntries.forEach(function (zipEntry) {
        names.push(zipEntry.entryName);
+       console.log(zipEntry.getData())
       });
       zip.extractAllTo(folder, /*overwrite*/ true);
       let index=1;
