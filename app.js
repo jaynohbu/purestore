@@ -86,7 +86,7 @@ function unzipFiles(file, folder) {
     stream.push(null);
     try {
       stream.pipe(unzip.Extract({
-        path: folder 
+        path: folder
       }));
       setTimeout(() => {
         resolve();
@@ -102,7 +102,7 @@ function unzipFiles(file, folder) {
 //   return new Promise((resolve, reject) => {
 
 //     try {
-    
+
 //       var zip = new AdmZip(zipfilename);
 //       var zipEntries = zip.getEntries(); // an array of ZipEntry records
 //       let names = [];
@@ -142,40 +142,44 @@ async function upload(req, res) {
   let sku = await docs.getNextSku();
   console.log(req.files)
   let file = req.files.file;
-  let zipfilename = __dirname + '/public/' + file.name;
-  fs.writeFile(zipfilename, file.data, function (err, data) {
+  let new_name = '';
+  if (file.name.indexOf('thumbnail') > 0) {
+    new_name = sku + "_2." + file.name;
+  } else {
+    new_name = sku + `_${moment().unix()}.` + file.name;
+  }
+
+  let folder = __dirname + '/public/static/media/';
+  let path = folder + new_name;
+  fs.writeFile(path, file.data, function (err, data) {
     if (err) {
       return console.log(err);
     }
     if (req.query.sku) sku = req.query.sku;
-    let folder = __dirname + '/public/static/media/';
+
     res.status(200).json({
-      sku: sku
+      sku: sku,
+      path: path
     });
- var mediapath = __dirname + '/public/';
-    unzipFiles(file, mediapath).then(function () {
-     
-      exec(`
+    exec(`
     aws s3 sync ${mediapath}  s3://${config.CONTENT_S3_BUCKET}/
     `, (error, stdout, stderr) => {
-        if (error) {
-          console.log(error.stack);
-          console.log('Error code: ' + error.code);
-          console.log('Signal received: ' + error.signal);
-        }
+      if (error) {
+        console.log(error.stack);
+        console.log('Error code: ' + error.code);
+        console.log('Signal received: ' + error.signal);
+      }
 
-        exec('rm -rf ' + folder, function (error2, stdout2, stderr2) {
-          if (error2) {
-            console.log(error2.stack);
-            console.log('Error code: ' + error2.code);
-            console.log('Signal received: ' + error2.signal);
-          }
-          console.log('file moved to s3 ');
-        })
+      exec('rm -rf ' + folder, function (error2, stdout2, stderr2) {
+        if (error2) {
+          console.log(error2.stack);
+          console.log('Error code: ' + error2.code);
+          console.log('Signal received: ' + error2.signal);
+        }
+        console.log('file moved to s3 ');
       })
-    }).catch((exception) => {
-      console.log(exception)
-    });
+    })
+
   });
 
 
