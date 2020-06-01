@@ -91,7 +91,7 @@ async function upload(req, res) {
     new_name = sku + `_${moment().unix()}.` + file.name;
   }
 
-  let folder = __dirname + '/public/static/product/';
+  let folder = __dirname + '/public/static/products/';
   let path = folder + new_name;
   fs.writeFile(path, file.data, function (err) {
     if (err) {
@@ -100,7 +100,7 @@ async function upload(req, res) {
     if (req.query.sku) sku = req.query.sku;
     res.status(200).json({
       sku: sku,
-      path: '/static/product/' + new_name
+      path: '/static/products/' + new_name
     });
     let local_path = __dirname + '/public';
     exec(` aws s3 sync ${local_path}  s3://${config.CONTENT_S3_BUCKET}/`, (error, stdout, stderr) => {
