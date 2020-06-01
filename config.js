@@ -9,7 +9,7 @@ module.exports = function () {
           LMS_S3: {
                "aws_access_key_id": "AKIA44NUVTGCODXT5KXP",
                "aws_secret_access_key": "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",
-            "region": "us-west-2"
+               "region": "us-west-1"
           },
           UNZIP_MAX_TIME:5000
       };
@@ -21,7 +21,7 @@ module.exports = function () {
           LMS_S3: {
                "aws_access_key_id": "AKIA44NUVTGCODXT5KXP",
                "aws_secret_access_key": "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",
-            "region": "us-west-2"
+            "region": "us-west-1"
           },
           UNZIP_MAX_TIME: 5000
       };
@@ -33,7 +33,7 @@ module.exports = function () {
           LMS_S3: {
             "aws_access_key_id": "AKIA44NUVTGCODXT5KXP",
             "aws_secret_access_key": "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",
-            "region": "us-west-2"
+            "region": "us-west-1"
           },
           UNZIP_MAX_TIME: 5000
 
