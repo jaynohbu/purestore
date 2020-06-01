@@ -5,11 +5,10 @@ const bodyParser = require('body-parser');
 const docs = require('./controllers/document');
 const fileUpload = require('express-fileupload');
 const app = express();
-var unzip = require('unzip');
+
 var moment = require('moment');
 var AWS = require('aws-sdk');
-var AdmZip = require('adm-zip');
-let Readable = require('stream').Readable;
+
 var fs = require('fs');
 const {
   exec
