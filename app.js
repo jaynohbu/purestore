@@ -7,8 +7,8 @@ const app = express();
 var basePath = __dirname + "/..";
 var moment = require('moment');
 var AWS = require('aws-sdk');
-var unzip = require('unzip');
-var Readable = require('stream').Readable;
+var AdmZip = require('adm-zip');
+
 const config = require('../config')();
 AWS.config.update(config.LMS_S3);
 s3 = new AWS.S3();
@@ -73,15 +73,20 @@ app.listen(port, () => {
   console.log(`[products] API listening on port ${port}.`);
 });
 
-function unzipFiles(file, folder, folder_name) {
-  const stream = new Readable();
+function unzipFiles(file, folder, sku) {
+
   return new Promise((resolve, reject) => {
-    stream.push(file.data);
-    stream.push(null);
+  
     try {
-      stream.pipe(unzip.Extract({
-        path: folder + '/' + folder_name
-      }));
+      // reading archives
+      var zip = new AdmZip(file.data);
+      var zipEntries = zip.getEntries(); // an array of ZipEntry records
+
+      zipEntries.forEach(function (zipEntry) {
+        console.log(zipEntry.toString()); // outputs zip entries information
+      
+      });
+      zip.extractAllTo(folder, /*overwrite*/ true);
       setTimeout(() => {
         resolve();
       }, config.UNZIP_MAX_TIME);
@@ -94,9 +99,8 @@ function unzipFiles(file, folder, folder_name) {
 async function upload(req, res) {
   let sku = await docs.getNextSku();
   let file = req.files.file;
-  let folder_name = sku;
-  if (req.query.sku) folder_name = req.query.sku;
-  let folder = basePath + '/public/' + folder_name;
+  if (req.query.sku) sku = req.query.sku;
+  let folder = basePath + '/public/' + sku;
   res.status(200).json({
     sku: sku
   });

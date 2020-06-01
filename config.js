@@ -10,7 +10,8 @@ module.exports = function () {
             "aws_access_key_id": "AKIA44NUVTGCC3Y73UOF",
             "aws_secret_access_key": "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",
             "region": "us-west-2"
-          }
+          },
+          UNZIP_MAX_TIME:5000
       };
     case 'production':
       return {
@@ -21,7 +22,8 @@ module.exports = function () {
             "aws_access_key_id": "AKIA44NUVTGCC3Y73UOF",
             "aws_secret_access_key": "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",
             "region": "us-west-2"
-          }
+          },
+          UNZIP_MAX_TIME: 5000
       };
     default:
       return {
@@ -32,7 +34,8 @@ module.exports = function () {
             "aws_access_key_id": "AKIA44NUVTGCC3Y73UOF",
             "aws_secret_access_key": "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",
             "region": "us-west-2"
-          }
+          },
+          UNZIP_MAX_TIME: 5000
 
       };
   }
