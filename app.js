@@ -111,14 +111,15 @@ async function upload(req, res) {
   console.log(req.files)
   let file = req.files.file;
   if (req.query.sku) sku = req.query.sku;
-  let folder = basePath + '/public/' + sku;
+  let folder = basePath + '/public/static/media/' ;
   res.status(200).json({
     sku: sku
   });
 
   unzipFiles(file, folder, sku).then(function () {
+    var mediapath = basePath + '/public/';
     exec(`
-    aws s3 sync ${folder}  s3://${config.CONTENT_S3_BUCKET}/static/media/${sku}/
+    aws s3 sync ${mediapath}  s3://${config.CONTENT_S3_BUCKET}/
     `, (error, stdout, stderr) => {
       if (error) {
         console.log(error.stack);
