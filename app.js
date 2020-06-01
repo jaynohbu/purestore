@@ -93,38 +93,23 @@ async function upload(req, res) {
 
   let folder = __dirname + '/public/static/media/';
   let path = folder + new_name;
-  fs.writeFile(path, file.data, function (err, data) {
+  fs.writeFile(path, file.data, function (err) {
     if (err) {
       return console.log(err);
     }
     if (req.query.sku) sku = req.query.sku;
-
     res.status(200).json({
       sku: sku,
       path: path
     });
     let local_path = __dirname + '/public';
-    exec(`
-    aws s3 sync ${local_path}  s3://${config.CONTENT_S3_BUCKET}/
-    `, (error, stdout, stderr) => {
+    exec(` aws s3 sync ${local_path}  s3://${config.CONTENT_S3_BUCKET}/`, (error, stdout, stderr) => {
       if (error) {
         console.log(error.stack);
         console.log('Error code: ' + error.code);
         console.log('Signal received: ' + error.signal);
       }
-
-      // exec('rm -rf ' + folder, function (error2, stdout2, stderr2) {
-      //   if (error2) {
-      //     console.log(error2.stack);
-      //     console.log('Error code: ' + error2.code);
-      //     console.log('Signal received: ' + error2.signal);
-      //   }
         console.log('file moved to s3 ');
-      })
-    })
-
-  });
-
-
-
+      });
+    });
 }
