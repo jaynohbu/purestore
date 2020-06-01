@@ -80,21 +80,21 @@ app.listen(port, () => {
 function unzipFiles(file, folder, sku) {
 
   return new Promise((resolve, reject) => {
-  
+
     try {
-     if(!file.data)return reject('no data');
+      if (!file.data) return reject('no data');
       var zip = new AdmZip(file.data);
       var zipEntries = zip.getEntries(); // an array of ZipEntry records
-      let index=1;
+      let index = 1;
       zipEntries.forEach(function (zipEntry) {
-       if(zipEntry.entryName.indexOf('thumbnail')>0){
-         zipEntry.name = sku + "_" + 2 + "." + zipEntry.name;
-       }else{
-         if (index == 2) index=3;
+        if (zipEntry.entryName.indexOf('thumbnail') > 0) {
+          zipEntry.name = sku + "_" + 2 + "." + zipEntry.name;
+        } else {
+          if (index == 2) index = 3;
           zipEntry.name = sku + "_" + index + "." + zipEntry.name;
           index++;
-       }
-      
+        }
+
       });
       zip.extractAllTo(folder, /*overwrite*/ true);
       setTimeout(() => {
@@ -116,16 +116,28 @@ async function upload(req, res) {
     sku: sku
   });
 
-  unzipFiles(file, folder, sku).then(async function () {
+  unzipFiles(file, folder, sku).then(function () {
     exec(`
     aws s3 sync ${folder}  s3://${config.CONTENT_S3_BUCKET}/static/media/${sku}/
-    `).then(async () => {
-      exec('rm -rf ' + folder).then(() => {
+    `, (error, stdout, stderr) => {
+      if (error) {
+        console.log(error.stack);
+        console.log('Error code: ' + error.code);
+        console.log('Signal received: ' + error.signal);
+      }
+
+      exec('rm -rf ' + folder, function (error2, stdout2, stderr2) {
+        if (error2) {
+          console.log(error2.stack);
+          console.log('Error code: ' + error2.code);
+          console.log('Signal received: ' + error2.signal);
+        }
         console.log('file moved to s3 ');
       })
-    }).catch((exception)=>{
-      console.log(exception)
-    });
+    })
+  }).catch((exception) => {
+    console.log(exception)
+  });
 
-  })
+
 }
