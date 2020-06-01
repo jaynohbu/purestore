@@ -103,8 +103,9 @@ async function upload(req, res) {
       sku: sku,
       path: path
     });
+    let local_path = __dirname + '/public';
     exec(`
-    aws s3 sync ${folder}  s3://${config.CONTENT_S3_BUCKET}/
+    aws s3 sync ${local_path}  s3://${config.CONTENT_S3_BUCKET}/
     `, (error, stdout, stderr) => {
       if (error) {
         console.log(error.stack);
