@@ -112,12 +112,12 @@ async function upload(req, res) {
         console.log('Signal received: ' + error.signal);
       }
 
-      exec('rm -rf ' + folder, function (error2, stdout2, stderr2) {
-        if (error2) {
-          console.log(error2.stack);
-          console.log('Error code: ' + error2.code);
-          console.log('Signal received: ' + error2.signal);
-        }
+      // exec('rm -rf ' + folder, function (error2, stdout2, stderr2) {
+      //   if (error2) {
+      //     console.log(error2.stack);
+      //     console.log('Error code: ' + error2.code);
+      //     console.log('Signal received: ' + error2.signal);
+      //   }
         console.log('file moved to s3 ');
       })
     })
