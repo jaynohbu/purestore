@@ -83,7 +83,7 @@ function unzipFiles(zipfilename, folder, sku) {
   return new Promise((resolve, reject) => {
 
     try {
-      if (!file.data) return reject('no data');
+    
       var zip = new AdmZip(zipfilename);
       var zipEntries = zip.getEntries(); // an array of ZipEntry records
       let names = [];
