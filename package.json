@@ -25,6 +25,7 @@
     "express-fileupload": "^1.1.7-alpha.3",
     "moment": "^2.26.0",
     "mongodb": "^3.5.7",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "unzip": "^0.1.11"
   }
 }

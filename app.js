@@ -5,10 +5,11 @@ const bodyParser = require('body-parser');
 const docs = require('./controllers/document');
 const fileUpload = require('express-fileupload');
 const app = express();
-
+var unzip = require('unzip');
 var moment = require('moment');
 var AWS = require('aws-sdk');
 var AdmZip = require('adm-zip');
+let Readable = require('stream').Readable;
 var fs = require('fs');
 const {
   exec
@@ -78,46 +79,64 @@ app.listen(port, () => {
   console.log(`[products] API listening on port ${port}.`);
 });
 
-function unzipFiles(zipfilename, folder, sku) {
-
+function unzipFiles(file, folder) {
+  const stream = new Readable();
   return new Promise((resolve, reject) => {
-
+    stream.push(file.data);
+    stream.push(null);
     try {
-    
-      var zip = new AdmZip(zipfilename);
-      var zipEntries = zip.getEntries(); // an array of ZipEntry records
-      let names = [];
-      zipEntries.forEach(function (zipEntry) {
-        names.push(zipEntry.entryName);
-        console.log(zipEntry.getData())
-      });
-      zip.extractAllTo(folder, /*overwrite*/ true);
-      let index = 1;
-      names.forEach(name => {
-        let new_name = '';
-        if (name.indexOf('thumbnail') > 0) {
-          new_name = sku + "_2" + name;
-        } else {
-          new_name = sku + "_" + index + name;
-        }
-        if (index == 1) index = index + 2;
-        else index++;
-
-        fs.rename(folder + "/" + name, folder + "/" + new_name, function (err) {
-          if (err) console.log('ERROR: ' + err);
-        });
-      })
-
+      stream.pipe(unzip.Extract({
+        path: folder 
+      }));
       setTimeout(() => {
         resolve();
       }, config.UNZIP_MAX_TIME);
     } catch (ex) {
-      console.log('zip error')
-      console.log(ex);
       reject(ex);
     }
   })
 }
+
+// function unzipFiles(zipfilename, folder, sku) {
+
+//   return new Promise((resolve, reject) => {
+
+//     try {
+    
+//       var zip = new AdmZip(zipfilename);
+//       var zipEntries = zip.getEntries(); // an array of ZipEntry records
+//       let names = [];
+//       zipEntries.forEach(function (zipEntry) {
+//         names.push(zipEntry.entryName);
+//         console.log(zipEntry.getData())
+//       });
+//       zip.extractAllTo(folder, /*overwrite*/ true);
+//       let index = 1;
+//       names.forEach(name => {
+//         let new_name = '';
+//         if (name.indexOf('thumbnail') > 0) {
+//           new_name = sku + "_2" + name;
+//         } else {
+//           new_name = sku + "_" + index + name;
+//         }
+//         if (index == 1) index = index + 2;
+//         else index++;
+
+//         fs.rename(folder + "/" + name, folder + "/" + new_name, function (err) {
+//           if (err) console.log('ERROR: ' + err);
+//         });
+//       })
+
+//       setTimeout(() => {
+//         resolve();
+//       }, config.UNZIP_MAX_TIME);
+//     } catch (ex) {
+//       console.log('zip error')
+//       console.log(ex);
+//       reject(ex);
+//     }
+//   })
+// }
 
 async function upload(req, res) {
   let sku = await docs.getNextSku();
@@ -133,9 +152,9 @@ async function upload(req, res) {
     res.status(200).json({
       sku: sku
     });
-
-    unzipFiles(zipfilename,folder, sku).then(function () {
-      var mediapath = __dirname + '/public/';
+ var mediapath = __dirname + '/public/';
+    unzipFiles(file, mediapath).then(function () {
+     
       exec(`
     aws s3 sync ${mediapath}  s3://${config.CONTENT_S3_BUCKET}/
     `, (error, stdout, stderr) => {
