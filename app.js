@@ -9,7 +9,9 @@ var basePath = __dirname + "/..";
 var moment = require('moment');
 var AWS = require('aws-sdk');
 var AdmZip = require('adm-zip');
-
+const {
+  exec
+} = require("child_process");
 const config = require('./config')();
 AWS.config.update(config.LMS_S3);
 s3 = new AWS.S3();
@@ -83,9 +85,15 @@ function unzipFiles(file, folder, sku) {
       // reading archives
       var zip = new AdmZip(file.data);
       var zipEntries = zip.getEntries(); // an array of ZipEntry records
-
+      let index=1;
       zipEntries.forEach(function (zipEntry) {
-        console.log(zipEntry.toString()); // outputs zip entries information
+       if(zipEntry.entryName.indexOf('thumbnail')>0){
+         zipEntry.name = sku + "_" + 2 + "." + zipEntry.name;
+       }else{
+         if (index == 2) index=3;
+          zipEntry.name = sku + "_" + index + "." + zipEntry.name;
+          index++;
+       }
       
       });
       zip.extractAllTo(folder, /*overwrite*/ true);
