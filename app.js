@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const docs = require('./controllers/document');
 const fileUpload = require('express-fileupload');
 const app = express();
-var basePath = __dirname + "/..";
+
 var moment = require('moment');
 var AWS = require('aws-sdk');
 var AdmZip = require('adm-zip');
@@ -123,19 +123,19 @@ async function upload(req, res) {
   let sku = await docs.getNextSku();
   console.log(req.files)
   let file = req.files.file;
-  let zipfilename = basePath + '/public/' + file.name;
+  let zipfilename = __dirname + '/public/' + file.name;
   fs.writeFile(zipfilename, file.data, function (err, data) {
     if (err) {
       return console.log(err);
     }
     if (req.query.sku) sku = req.query.sku;
-    let folder = basePath + '/public/static/media/';
+    let folder = __dirname + '/public/static/media/';
     res.status(200).json({
       sku: sku
     });
 
     unzipFiles(file, folder, sku).then(function () {
-      var mediapath = basePath + '/public/';
+      var mediapath = __dirname + '/public/';
       exec(`
     aws s3 sync ${mediapath}  s3://${config.CONTENT_S3_BUCKET}/
     `, (error, stdout, stderr) => {
