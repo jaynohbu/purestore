@@ -89,6 +89,7 @@ function unzipFiles(file, folder, sku) {
       zipEntries.forEach(function (zipEntry) {
         if (zipEntry.entryName.indexOf('thumbnail') > 0) {
           zipEntry.name = sku + "_" + 2 + "." + zipEntry.name;
+          console.log(zipEntry)
         } else {
           if (index == 2) index = 3;
           zipEntry.name = sku + "_" + index + "." + zipEntry.name;
@@ -118,24 +119,24 @@ async function upload(req, res) {
 
   unzipFiles(file, folder, sku).then(function () {
     var mediapath = basePath + '/public/';
-    exec(`
-    aws s3 sync ${mediapath}  s3://${config.CONTENT_S3_BUCKET}/
-    `, (error, stdout, stderr) => {
-      if (error) {
-        console.log(error.stack);
-        console.log('Error code: ' + error.code);
-        console.log('Signal received: ' + error.signal);
-      }
+    // exec(`
+    // aws s3 sync ${mediapath}  s3://${config.CONTENT_S3_BUCKET}/
+    // `, (error, stdout, stderr) => {
+    //   if (error) {
+    //     console.log(error.stack);
+    //     console.log('Error code: ' + error.code);
+    //     console.log('Signal received: ' + error.signal);
+    //   }
 
-      exec('rm -rf ' + folder, function (error2, stdout2, stderr2) {
-        if (error2) {
-          console.log(error2.stack);
-          console.log('Error code: ' + error2.code);
-          console.log('Signal received: ' + error2.signal);
-        }
-        console.log('file moved to s3 ');
-      })
-    })
+    //   exec('rm -rf ' + folder, function (error2, stdout2, stderr2) {
+    //     if (error2) {
+    //       console.log(error2.stack);
+    //       console.log('Error code: ' + error2.code);
+    //       console.log('Signal received: ' + error2.signal);
+    //     }
+    //     console.log('file moved to s3 ');
+    //   })
+    // })
   }).catch((exception) => {
     console.log(exception)
   });
