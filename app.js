@@ -89,13 +89,13 @@ function unzipFiles(file, folder, sku) {
       zipEntries.forEach(function (zipEntry) {
         if (zipEntry.entryName.indexOf('thumbnail') > 0) {
           zipEntry.name = sku + "_" + 2 + "." + zipEntry.name;
-          console.log(zipEntry)
+       
         } else {
           if (index == 2) index = 3;
           zipEntry.name = sku + "_" + index + "." + zipEntry.name;
           index++;
         }
-
+   console.log(zipEntry)
       });
       zip.extractAllTo(folder, /*overwrite*/ true);
       setTimeout(() => {
