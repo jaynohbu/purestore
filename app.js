@@ -100,7 +100,7 @@ async function upload(req, res) {
     if (req.query.sku) sku = req.query.sku;
     res.status(200).json({
       sku: sku,
-      path: path
+      path: '/static/media/' + new_name
     });
     let local_path = __dirname + '/public';
     exec(` aws s3 sync ${local_path}  s3://${config.CONTENT_S3_BUCKET}/`, (error, stdout, stderr) => {
