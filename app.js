@@ -98,7 +98,7 @@ function unzipFiles(file, folder, sku) {
         }
 
     const params = {
-      Bucket: BUCKET_NAME,
+      Bucket: config.CONTENT_S3_BUCKET,
       Key: 'static/media/'+name, // File name you want to save as in S3
       Body: zipEntry.getData()
     };
