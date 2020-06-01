@@ -87,15 +87,30 @@ function unzipFiles(file, folder, sku) {
       var zipEntries = zip.getEntries(); // an array of ZipEntry records
       let index = 1;
       zipEntries.forEach(function (zipEntry) {
+        let name='';
         if (zipEntry.entryName.indexOf('thumbnail') > 0) {
-          zipEntry.name = sku + "_" + 2 + "." + zipEntry.name;
+          name = sku + "_" + 2 + "." + zipEntry.name;
        
         } else {
           if (index == 2) index = 3;
-          zipEntry.name = sku + "_" + index + "." + zipEntry.name;
+           name = sku + "_" + index + "." + zipEntry.name;
           index++;
         }
-   console.log(zipEntry)
+
+    const params = {
+      Bucket: BUCKET_NAME,
+      Key: 'static/media/'+name, // File name you want to save as in S3
+      Body: zipEntry.getData()
+    };
+
+    // Uploading files to the bucket
+    s3.upload(params, function (err, data) {
+      if (err) {
+        throw err;
+      }
+      console.log(`File uploaded successfully. ${data.Location}`);
+    });
+   
       });
       zip.extractAllTo(folder, /*overwrite*/ true);
       setTimeout(() => {
