@@ -12,7 +12,6 @@ var unzip = require('unzip');
 AWS.config.update(config.LMS_S3);
 s3 = new AWS.S3();
 
-var fs = require('fs');
 app.use(bodyParser.urlencoded({
   extended: true
 }));
