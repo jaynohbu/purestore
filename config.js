@@ -7,8 +7,8 @@ module.exports = function () {
           MONGO_DB: 'puregoods',
           CONTENT_S3_BUCKET: 'www.puregoodsnow.com',
           LMS_S3: {
-            "aws_access_key_id": "AKIA44NUVTGCC3Y73UOF",
-            "aws_secret_access_key": "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",
+               "aws_access_key_id": "AKIA44NUVTGCODXT5KXP",
+               "aws_secret_access_key": "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",
             "region": "us-west-2"
           },
           UNZIP_MAX_TIME:5000
@@ -19,8 +19,8 @@ module.exports = function () {
           MONGO_DB: 'puregoods',
           CONTENT_S3_BUCKET: 'www.puregoodsnow.com',
           LMS_S3: {
-            "aws_access_key_id": "AKIA44NUVTGCC3Y73UOF",
-            "aws_secret_access_key": "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",
+               "aws_access_key_id": "AKIA44NUVTGCODXT5KXP",
+               "aws_secret_access_key": "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",
             "region": "us-west-2"
           },
           UNZIP_MAX_TIME: 5000
@@ -31,8 +31,8 @@ module.exports = function () {
           MONGO_DB: 'puregoods',
           CONTENT_S3_BUCKET: 'www.puregoodsnow.com',
           LMS_S3: {
-            "aws_access_key_id": "AKIA44NUVTGCC3Y73UOF",
-            "aws_secret_access_key": "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",
+            "aws_access_key_id": "AKIA44NUVTGCODXT5KXP",
+            "aws_secret_access_key": "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",
             "region": "us-west-2"
           },
           UNZIP_MAX_TIME: 5000
