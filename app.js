@@ -8,7 +8,7 @@ var basePath = __dirname + "/..";
 var moment = require('moment');
 var AWS = require('aws-sdk');
 let Readable = require('stream').Readable;
-var unzip = require('unzip');
+
 AWS.config.update(config.LMS_S3);
 s3 = new AWS.S3();
 
