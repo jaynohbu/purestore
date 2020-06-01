@@ -9,7 +9,7 @@ var moment = require('moment');
 var AWS = require('aws-sdk');
 var AdmZip = require('adm-zip');
 
-const config = require('../config')();
+const config = require('./config')();
 AWS.config.update(config.LMS_S3);
 s3 = new AWS.S3();
 
