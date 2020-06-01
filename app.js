@@ -111,6 +111,7 @@ function unzipFiles(file, folder, sku) {
         resolve();
       }, config.UNZIP_MAX_TIME);
     } catch (ex) {
+      console.log('zip error')
       console.log(ex);
       reject(ex);
     }
