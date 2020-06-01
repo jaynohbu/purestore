@@ -98,7 +98,8 @@ function unzipFiles(file, folder, sku) {
 
 async function upload(req, res) {
   let sku = await docs.getNextSku();
-  let file = req.files.file;
+  console.log(req)
+  let file = req.file;
   if (req.query.sku) sku = req.query.sku;
   let folder = basePath + '/public/' + sku;
   res.status(200).json({
