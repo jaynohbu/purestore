@@ -63,7 +63,7 @@ export class ProductService {
   public updateProduct(Product): Observable<HttpEvent<any>> {
     let url = environment.API_ENDPOINT + '/product';
     let options = { headers: this.headers };
-    const req = new HttpRequest('PUT', url, Product, options);
+    const req = new HttpRequest('PUT', url, {product:Product}, options);
     return this.http.request(req);
   }
   public updateProductCategory(category): Observable<HttpEvent<any>> {
@@ -74,10 +74,10 @@ export class ProductService {
   }
  
 
-  public deleteProduct(product_id): Observable<HttpEvent<any>> {
-    let url = environment.API_ENDPOINT + '/Productcontent/' + product_id;
+  public deleteProduct(sku): Observable<HttpEvent<any>> {
+    let url = environment.API_ENDPOINT + '/product';
     let options = { headers: this.headers };
-    const req = new HttpRequest('DELETE', url, {}, options);
+    const req = new HttpRequest('DELETE', url, {sku:sku}, options);
     return this.http.request(req);
   }
  

@@ -40,7 +40,7 @@ export const fetchProducts = (filters, sortBy, callback) => dispatch => {
       if (!!callback) {
         callback();
       }
-
+      console.log(products)
       return dispatch({
         type: FETCH_PRODUCTS,
         payload: products

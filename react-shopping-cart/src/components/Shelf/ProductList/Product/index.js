@@ -38,7 +38,9 @@ const Product = ({ product, addProduct }) => {
       )}
       <Thumb
         classes="shelf-item__thumb"
-        src={require(`../../../../static/products/${product.sku}_1.jpg`)}
+        src = {
+          product.imageUrls ? product.imageUrls[0] : 'http://www.puregoodsnow.com.s3-website-us-west-2.amazonaws.com/static/products/no-img.jpg'
+        }
         alt={product.title}
       />
       <p className="shelf-item__title">{product.title}</p>

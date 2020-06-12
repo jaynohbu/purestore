@@ -22,8 +22,10 @@ export class UploadComponent {
 
     try {
       let data = await dialogRef.afterClosed().toPromise();
-
-      this.close.emit(data.key);
+      this.key=data.sku;
+      //alert('closed'+this.key)
+     
+      this.close.emit(data);
     } catch (ex) {
       console.log(ex);
     }

@@ -1,4 +1,5 @@
 const config = require('../config')();
+var moment = require('moment');
 var MongoClient = require('mongodb').MongoClient;
 module.exports.insertCheckout = (key, items) => {
   return new Promise((resolve, reject) => {
@@ -56,8 +57,51 @@ module.exports.getCheckout = (key) => {
     });
   });
 }
+module.exports.removePhoto = async (imgurl) => {
+  var product;
+  return new Promise(async (resolve, reject) => {
+    try {
+      product = await getProduct(sku);
+    } catch (ex) {
+      return reject(ex)
+    }
+    if (product) {
+      if (product.imageUrl) {
+        product.images = product.images.filter(url => url != imgurl);
+        try {
+          await updateProduct(product);
+        } catch (ex) {
+          return reject(ex);
+        }
+        resolve(true)
+      }
+    }
+  });
+}
+module.exports.removeProduct = function removeProduct(sku) {
+  return new Promise((resolve, reject) => {
+    var url = config.MONGO_URL;
+    MongoClient.connect(url, {
 
-module.exports.getProduct = (sku) => {
+    }, async function (err, client) {
+      if (!err) {
+        console.log(sku)
+        var db = client.db(config.MONGO_DB);
+        try {
+          db.collection('products').remove({
+             "sku": parseInt(sku)
+          });
+          resolve()
+        } catch (e) {
+          reject(e)
+        }
+      } else {
+        return reject(err);
+      }
+    });
+  });
+}
+module.exports.getProduct = function getProduct(sku) {
   return new Promise((resolve, reject) => {
     var url = config.MONGO_URL;
     MongoClient.connect(url, {
@@ -90,26 +134,25 @@ module.exports.getProduct = (sku) => {
   });
 }
 
-module.exports.updateProduct = (product) => {
+module.exports.updateProduct = function updateProduct(product) {
   return new Promise((resolve, reject) => {
     var url = config.MONGO_URL;
+    product.updated_at = moment().format();
     MongoClient.connect(url, {
 
     }, async function (err, client) {
       if (!err) {
         var db = client.db(config.MONGO_DB);
         try {
-          db.collection('products').update(
-            {
+          db.collection('products').update({
               "sku": product.sku
             },
-           product,
-            {
+            product, {
               "multi": false, // update only one document 
               "upsert": false // insert a new document, if no existing document match the query 
             }
           );
-          
+
         } catch (e) {
           console.log(e)
           reject(e);
@@ -143,11 +186,19 @@ module.exports.getNextSku = () => {
             if (doc) {
               nextSku = parseInt(doc.sku) + 1;
               db.collection("products").insertOne({
-                sku: nextSku
+                sku: nextSku,
+                name: 'New Product',
+                created_at: moment().format(),
+                updated_at: moment().format()
               });
-              resolve(nextSku);
+              return resolve(nextSku);
             }
-            return resolve(-1);
+
+            db.collection("products").insertOne({
+              sku: 100001,
+              name: 'New Product'
+            });
+            return resolve(100001); //start from 100001
           })
         } catch (e) {
           console.log('error 1');
@@ -192,7 +243,11 @@ module.exports.getAllProducts = () => {
       if (!err) {
         var db = client.db(config.MONGO_DB);
         try {
-          let cursor = db.collection("products").find({});
+          let cursor = db.collection("products").find({
+            "category_id": {
+              $ne: null
+            }
+          });
           let docs = [];
           cursor.each(async function (err2, doc) {
             if (err2) {

@@ -17,6 +17,7 @@ import { DeleteConfirmComponent } from '../dialogs/delete-confirm/delete-confirm
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { Auth } from 'aws-amplify';
+import { Category } from '../model/category';
 
 @Component({
   selector: 'app-product-admin',
@@ -24,8 +25,8 @@ import { Auth } from 'aws-amplify';
   styleUrls: ['./product-admin.component.scss']
 })
 export class ProductAdminComponent implements OnInit {
- 
-  displayedColumns: string[] = ['category_name', 'sku', 'title', 'description'];
+
+  displayedColumns: string[] = ['category_name', 'sku', 'title', 'description','updated_at','_id'];
   dataSourceProduct: MatTableDataSource<ProductData>;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -35,13 +36,11 @@ export class ProductAdminComponent implements OnInit {
   showEdit: boolean = false;
   isProd: boolean = false;
   products: any[] = [];
-  categories: any[] = [];
-  categoryNames: string[];
-  productNames: string[];
-  currentProduct: ProductData;
-  product_id: string;
-
-  sku: string;
+  categories: Category[] = [];
+  outProduct: ProductData;
+  hasError: boolean = false;
+  errorMessage: string;
+  sku: number;
   constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer, private productService: ProductService, private authService: AuthService, public dialog: MatDialog, private router: Router) {
     iconRegistry.addSvgIcon('edit', sanitizer.bypassSecurityTrustResourceUrl('../../assets/icons/baseline-edit-24px.svg'));
     iconRegistry.addSvgIcon('delete', sanitizer.bypassSecurityTrustResourceUrl('../../assets/icons/baseline-delete_forever-24px.svg'));
@@ -67,93 +66,41 @@ export class ProductAdminComponent implements OnInit {
   logOut() {
     this.authService.logOut();
   }
-  saveCategory(current_detail, categories, productService) {
-    return new Promise(function (resolve, reject) {
-      if (current_detail.productForm.value.category_name) {
-        let exist = categories.filter(c => c.name == current_detail.productForm.value.category_name);
-        if (exist.length == 0) {
-          productService.createCourseCategory({ name: current_detail.productForm.value.category_name }).subscribe(e => {
-            if (e instanceof HttpResponse) {
-              current_detail.productForm.value.category_id = e.body.category_id;
-              return resolve();
-            } else if (e instanceof HttpErrorResponse) {
-              console.log(e);
-              return reject();
-            } else {
-              console.log(e);
-
-            }
-          });
-        } else {
-          current_detail.productForm.value.category_id = exist[0].category_id;
-          return resolve();
-        }
-      } else {
-        return reject()
-      }
-    });
+  productChange(e){
+    this.outProduct=e.product;
   }
-  saveProduct(current_detail, courses, productService) {
-
-    return new Promise(function (resolve, reject) {
-
-      if (current_detail.productForm.value.sku) {
-        let exist = courses.filter(c => c.name == current_detail.productForm.value.sku);
-        if (exist.length == 0) {
-          try {
-            productService.createProduct({ name: current_detail.productForm.value.sku, category_id: current_detail.productForm.value.category_id }).subscribe(e => {
-              if (e instanceof HttpResponse) {
-                current_detail.productForm.value.course_id = e.body.course_id;
-                return resolve();
-              } else if (e instanceof HttpErrorResponse) {
-                console.log(e);
-                return reject();
-              } else {
-                console.log(e);
-
-              }
-            })
-          } catch (ex) {
-            console.log(ex);
-            return reject();
-          }
-        } else {
-          current_detail.productForm.value.course_id = exist[0].course_id;
-          return resolve();
-        }
-      }
-    })
-  }
-  async saveContent() {
-
-    if (!this.current_detail.productForm.valid || this.current_detail.hasError) return;
-    try {
-      // if (!this.current_detail.productForm.value.activity_id) this.current_detail.productForm.value.activity_id = this.activity_id;
-      // if (!this.current_detail.productForm.value.product_name) this.current_detail.productForm.value.course_name = this.course_name;
-      // if (!this.current_detail.productForm.value.content_key) this.current_detail.productForm.value.course_name = this.content_key;
-      // await this.saveCategory(this.current_detail, this.categories, this.productService);
-      // await this.saveProduct(this.current_detail, this.courses, this.productService);
-
-    } catch (ex) {
-      console.log(ex);
-
+  saveProduct() {
+    this.hasError = false;
+    this.errorMessage = "";
+    if (this.outProduct.imageUrls.length<2){
+      this.hasError=true;
+      this.errorMessage="At least two images are required.";
+      return;
     }
+    if (this.current_detail.productForm.valid) {
+      try {
+        this.productService.updateProduct(this.outProduct).subscribe(e => {
+          if (e instanceof HttpResponse) {
 
-    // if (this.current_detail.productForm.value.content_id > 0) {
-    //   this.productService.updateCourseContent(this.current_detail.productForm.value).toPromise().then(e => {
-    //     this.reloadAllData();
-    //     this.editMode = false;
-    //   }, r => console.log(r))
-    // } else {
+          } else if (e instanceof HttpErrorResponse) {
+            console.log(e);
 
-    //   this.productService.createCourseContent(this.current_detail.productForm.value).toPromise().then(e => {
-    //     this.reloadAllData();
-    //     this.editMode = false;
-    //   }, r => console.log(r))
-    // }
+          } else {
+            console.log(e);
+
+          }
+        })
+      } catch (ex) {
+
+      }
+    }else{
+      this.hasError=true;
+      this.errorMessage="Please fill out the form correctly."
+    }
+    this.editMode = false;
+    this.reloadAllData();
 
   }
- 
   refreshToken() {
     Auth.currentSession()
       .then(data => {
@@ -166,75 +113,50 @@ export class ProductAdminComponent implements OnInit {
     this.productService.getAllProductCategores().subscribe((event) => {
       if (event instanceof HttpResponse) {
         this.categories = event.body.categories;
-        this.categoryNames = [];
-        for (let cat of this.categories) {
-          this.categoryNames.push(cat.name);
-        }
-
         this.productService.getAllProducts().subscribe((event2) => {
           if (event2 instanceof HttpResponse) {
             this.products = event2.body.products;
-            if (this.products.length>0)
-            this.products = this.products.map(p=>{
-              p.category_name = this.categories.find(c=>p.category_id==c.id).name;
-              return p;
-            });
             this.dataSourceProduct = new MatTableDataSource(this.products);
             this.dataSourceProduct.paginator = this.paginator;
             this.dataSourceProduct.sort = this.sort;
             this.paginator.pageIndex = 0;
           } else if (event2 instanceof HttpErrorResponse) {
-            console.log(event2);
+
           }
         });
       } else if (event instanceof HttpErrorResponse) {
         console.log(event);
       }
     });
-
-  
-
- 
- 
-
-
   }
-  onContentInit(e: any) {
-    this.product_id = e.data.product_id;
-    this.product_name = e.data.name;
-    this.sku = e.data.sku;
-  }
+
   ngOnInit() {
     this.reloadAllData();
-   // this.currentProduct = new ProductData('', '', 0, '', '', '', '', '', 0, '', '', 0, 0, '', '', '');
-  }
-  edit(product_id) {
-    this.editMode = true;
-    this.currentProduct = this.products.find(c => c.product_id == product_id) as ProductData;
-   
+    this.hasError = false;
+    this.errorMessage = "";
 
+  }
+  edit(sku) {
+    this.sku=sku;
+    this.editMode = true;
   }
   addNew() {
     this.editMode = true;
-    //this.currentProduct
-  }
-  openConfirmDelete(content_id: number): void {
+  
+  } 
+  openConfirmDelete(sku: string): void {
     const dialogRef = this.dialog.open(DeleteConfirmComponent, {
       width: '250px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result === 'yes') this.delete(content_id);
+      if (result === 'yes') this.delete(sku);
 
     });
   }
 
-
-
-
-
-  delete(product_id) {
-    this.productService.deleteProduct(product_id).toPromise().then(
+  delete(sku) {
+    this.productService.deleteProduct(sku).toPromise().then(
       () => {
 
         this.reloadAllData();
@@ -246,22 +168,6 @@ export class ProductAdminComponent implements OnInit {
     )
   }
 
-
-  // preview(content_id) {
-  //   this.productService.getCourseContentURL(content_id).toPromise().then(
-  //     (event) => {
-  //       if (event instanceof HttpResponse) {
-  //         let url = event.body.url;
-  //         window.open(url, "_blank");
-
-  //         console.log(url);
-
-  //       } else if (event instanceof HttpErrorResponse) {
-  //         console.log(event);
-  //       }
-  //     }
-  //   )
-  // }
   applyFilter(filterValue: string) {
     this.dataSourceProduct.filter = filterValue.trim().toLowerCase();
     if (this.dataSourceProduct.paginator) {

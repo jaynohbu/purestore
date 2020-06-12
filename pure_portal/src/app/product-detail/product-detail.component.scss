@@ -34,3 +34,43 @@
   margin-bottom: 50px;
   color: red;
 }
+.image {
+  position: relative;
+  border: solid 1px;
+  border-color: grey;
+  height: 30px;
+}
+
+.image button {
+  position: absolute;
+  right: 20px;
+}
+div.gallery {
+  margin: 5px;
+  border: 1px solid #ccc;
+  float: left;
+  width: 100px;
+}
+
+div.gallery:hover {
+  border: 1px solid #777;
+}
+
+div.gallery img {
+  width: auto;
+  height: 130px;
+  padding-top: 5px;;
+ 
+}
+div.desc {
+  padding: 15px;
+  text-align: center;
+}
+.btn-remove-image{
+  margin-top:10px;
+  width: 100px;
+  border-radius: 0px ;
+}
+.readOnly{
+  background-color: rgb(163, 158, 158)!important;
+}

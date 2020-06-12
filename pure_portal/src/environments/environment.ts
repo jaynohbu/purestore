@@ -11,7 +11,7 @@ export const environment = {
     "aws_content_delivery_bucket_region": "us-west-2",
     "aws_content_delivery_url": "https://d2srnl0gi4p3pi.cloudfront.net"
   },
-  API_ENDPOINT: "https://j3md2n9oeg.execute-api.us-west-2.amazonaws.com/prod/api",
-  //API_ENDPOINT: "http://localhost:8001/api",
+  //API_ENDPOINT: "https://j3md2n9oeg.execute-api.us-west-2.amazonaws.com/prod/api",
+  API_ENDPOINT: "http://localhost:8001/api",
   PATH_GET_CHECKOUT: "/checkout/{0}"
 };

@@ -1,48 +1,62 @@
 <div class='form-wrap'>
-  <uploader key="{{product.sku}}" (close)="uploadComplete($event)"></uploader>
-  <form class="content-container" [formGroup]="productForm" *ngIf='contentKeyExist()'>
-    <p *ngIf="hasError" class="error_box">
-      {{errorMessage}}
-    </p>
-    <mat-form-field>
+ 
 
-      <input type="text" placeholder="Product Category" aria-label="Category" matInput formControlName="category_name"
-         required>
-    </mat-form-field>
+
+  <form class="content-container" [formGroup]="productForm">
+     
+      <div>
+        <div *ngFor="let url of product.imageUrls" class="gallery">
+          <a target="_blank" href="{{url}}">
+            <img src="{{url}}">
+          </a>
+          <button type="button" class="btn btn-outline-dark btn-remove-image" (click)="removeImage(url)">Remove</button>
+        </div>
+      </div>
+      <div style="position: relative;; padding-bottom: 30px;;"><uploader style="position: absolute; right:50%;" [key]="sku" (close)="uploadComplete($event)"></uploader></div>
+   
+      <div style="clear: right;"></div>
     <mat-form-field>
-      <input type="text" placeholder="SKU" aria-label="sku" matInput formControlName="sku" readonly required>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="Title" formControlName="title" readonly required>
-    </mat-form-field>
-    <mat-form-field>
-      <textarea matInput placeholder="Description" formControlName="description" class="readOnly" readonly
-        required></textarea>
+   
+      <mat-select formControlName="category_id" [(value)]="defaultCategory" placeholder="Product Category" required>
+        <mat-option value="1">
+         Health
+        </mat-option>
+        <!-- <mat-option *ngFor="let category of categories" value="category.value">
+          {{category.text}}
+        </mat-option> -->
+      </mat-select>
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput placeholder="Available Sizes" formControlName="availableSizes" required>
+      <input type="text" readonly placeholder="SKU" aria-label="sku" matInput class="readOnly" formControlName="sku" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Title" formControlName="title" required>
+    </mat-form-field>
+    <mat-form-field>
+      <textarea matInput placeholder="Description" formControlName="description" required></textarea>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Available Sizes</mat-label>
+      <input matInput placeholder="Use comma to separate. ex: LG,MD,SM" formControlName="availableSizes" required>
     </mat-form-field>
     <mat-form-field>
       <input matInput placeholder="Style" formControlName="style" required>
     </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="Price" formControlName="price" required>
-    </mat-form-field>
-
-    <mat-form-field>
-      <input matInput placeholder="Currency" formControlName="currencyId" required>
-    </mat-form-field>
-
-    <mat-form-field>
-      <input matInput placeholder="Currency" formControlName="currencyFormat" required>
+      <input matInput placeholder="Price" type="number" formControlName="price"  required>
     </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="Currency" formControlName="isFreeShipping" required>
+      <mat-label>Currency</mat-label>
+      <mat-select formControlName="currencyFormat" matInput>
+        <mat-option *ngFor="let currency of currencies" [value]="currency.value">
+          {{currency.text}}
+        </mat-option>
+      </mat-select>
+    
     </mat-form-field>
-
-
-
+          <mat-checkbox  class="example-margin" formControlName="isFreeShipping" required>"Free Shipping</mat-checkbox>
     <ng-content></ng-content>
 
   </form>

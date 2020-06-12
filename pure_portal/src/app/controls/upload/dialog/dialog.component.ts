@@ -4,7 +4,7 @@ import { MatDialogRef } from '@angular/material';
 import { UploadService } from '../upload.service';
 import { Observable, Subject } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
-import {ProductService} from  '../../../service/product.service'
+import { ProductService } from '../../../service/product.service'
 @Component({
   selector: 'upload-dialog',
   templateUrl: './dialog.component.html',
@@ -45,27 +45,26 @@ export class DialogComponent {
   async onFileAdded() {
     this.uploadedFile = this.file.nativeElement.files[0];
     this.uploading = true;
-   
-        this.uploadingStatus = this.uploadService.upload(this.uploadedFile);
-        this.primaryButtonText = 'Finish';
-        this.canBeClosed = false;
-        this.dialogRef.disableClose = true;
-        this.showCancelButton = false;
-        this.uploadingStatus.subscribe(response => {
-          let val = response.done;
-          this.updateProgress.next(val);
-          if (val == 100) {
-            this.canBeClosed = true;
-            this.dialogRef.disableClose = false;
-            this.uploadSuccessful = true;
-            this.uploading = false;
-
-            setTimeout(() => {
-              //UPLOAD-COMPLETE
-              this.dialogRef.close({ key: response.key });//pssing the key back
-            }, 100);
-          }
-        });
+    this.uploadingStatus = this.uploadService.upload(this.uploadedFile, this.key);
+    this.primaryButtonText = 'Finish';
+    this.canBeClosed = false;
+    this.dialogRef.disableClose = true;
+    this.showCancelButton = false;
+    this.uploadingStatus.subscribe(response => {
+      let val = response.done;
+      this.updateProgress.next(val);
+      if (val == 100) {
+        this.canBeClosed = true;
+        this.dialogRef.disableClose = false;
+        this.uploadSuccessful = true;
+        this.uploading = false;
+      
+        setTimeout(() => {
+         // alert('onFileAdded'+response.uploaded.sku)
+          this.dialogRef.close({ sku: response.uploaded.sku, url: response.uploaded.path });//pssing the key back
+        }, 100);
+      }
+    });
 
 
   }

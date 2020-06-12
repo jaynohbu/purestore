@@ -33,7 +33,7 @@ app.use(function (req, res, next) {
 const port = 8001;
 app.post('/api/upload', upload);
 app.get('/api/products', (req, res) => {
-  console.log('/api/products');
+  
   docs.getAllProducts().then((prods) => {
     console.log('prods' + prods.length)
     res.status(200).send({
@@ -44,12 +44,16 @@ app.get('/api/products', (req, res) => {
 });
 app.get('/api/categories', (req, res) => {
   console.log('/api/categories');
-  docs.getAllCategories().then((cats) => {
-    console.log('categories' + cats.length)
-    res.status(200).send({
-      categories: cats
-    });
-  })
+   res.status(200).send({
+     categories: [{
+       text: "Health",
+       value: 1
+     }]
+   });
+  // docs.getAllCategories().then((cats) => {
+  //   console.log('categories' + cats.length)
+   
+  // })
 
 });
 app.post('/api/checkout', (req, res, next) => {
@@ -61,6 +65,36 @@ app.post('/api/checkout', (req, res, next) => {
   }
   next();
 });
+app.delete('/api/photo', (req, res, next) => {
+  try {
+    docs.removePhoto(req.query.name);
+    res.status(200).send();
+  } catch (ex) {
+    console.log(ex);
+  }
+  next();
+});
+app.delete('/api/product', (req, res, next) => {
+  try {
+    docs.removeProduct(req.body.sku);
+    res.status(200).send();
+  } catch (ex) {
+    console.log(ex);
+  }
+  next();
+});
+app.put('/api/product', (req, res, next) => {
+  try {
+    delete req.body.product._id;
+    docs.updateProduct(req.body.product);
+    res.status(200).send();
+  } catch (ex) {
+    console.log(ex);
+  }
+  next();
+});
+
+
 app.get('/api/checkout/:key', async (req, res, next) => {
   try {
 
@@ -77,20 +111,14 @@ app.get('/api/checkout/:key', async (req, res, next) => {
 app.listen(port, () => {
   console.log(`[products] API listening on port ${port}.`);
 });
-
-
-
 async function upload(req, res) {
-  let sku = await docs.getNextSku();
+  var sku=req.query.key;
+  if (!sku )
+  sku = await docs.getNextSku();
   console.log(req.files)
   let file = req.files.file;
   let new_name = '';
-  if (file.name.indexOf('thumbnail') > 0) {
-    new_name = sku + "_2." + file.name;
-  } else {
-    new_name = sku + `_${moment().unix()}.` + file.name;
-  }
-
+  new_name = sku + `_${moment().unix()}.` + file.name;
   let folder = __dirname + '/public/static/products/';
   let path = folder + new_name;
   fs.writeFile(path, file.data, function (err) {
@@ -98,18 +126,19 @@ async function upload(req, res) {
       return console.log(err);
     }
     if (req.query.sku) sku = req.query.sku;
-    res.status(200).json({
-      sku: sku,
-      path: '/static/products/' + new_name
-    });
+   
     let local_path = __dirname + '/public';
-    exec(` aws s3 sync ${local_path}  s3://${config.CONTENT_S3_BUCKET}/`, (error, stdout, stderr) => {
+    exec(` aws s3 sync ${local_path}  s3://${config.CONTENT_S3_BUCKET}/ --profile puresmoke`, (error, stdout, stderr) => {
       if (error) {
         console.log(error.stack);
         console.log('Error code: ' + error.code);
         console.log('Signal received: ' + error.signal);
       }
         console.log('file moved to s3 ');
+         res.status(200).json({
+           sku: sku,
+           path: config.CONTENT_S3_BUCKET_IMG_PATH+ new_name
+         });
       });
     });
 }
